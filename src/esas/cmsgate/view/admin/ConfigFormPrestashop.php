@@ -54,21 +54,21 @@ class ConfigFormPrestashop extends ConfigFormArray
 
     public function generateFields()
     {
-        return parent::generate();
+        return array_values(parent::generate()); //нужен индексный массив, а не ассоциативный
     }
 
     public function generateFieldArray(ConfigField $configField, $prestashopType, $addDefault = true)
     {
         $ret = array(
             'type' => $prestashopType,
-            'label' => $configField->getKey(),
-            'name' => $configField->getName(),
+            'label' => $configField->getName(),
+            'name' => $configField->getKey(),
             'required' => $configField->isRequired(),
         );
         if ($addDefault && $configField->hasDefault()) {
-            $ret['default_value'] = $configField->getDefault();
+            $ret['default_value'] = $configField->getDefault(); //скорее всего не работает и значение подставляется в \esas\cmsgate\prestashop\CmsgatePaymentModule::getConfigFieldsValues
         }
-        if ($configField->getValidationResult()->isValid())
+        if ($configField->getValidationResult() == null || $configField->getValidationResult()->isValid())
             $ret['desc'] = $configField->getDescription();
         else {
             $ret['desc'] = [
@@ -87,6 +87,9 @@ class ConfigFormPrestashop extends ConfigFormArray
     public function generateTextAreaField(ConfigFieldTextarea $configField)
     {
         $ret = $this->generateFieldArray($configField, "textarea");
+        $ret['cols'] = $configField->getCols();
+        $ret['rows'] = $configField->getRows();
+        return $ret;
     }
 
     public function generateCheckboxField(ConfigFieldCheckbox $configField)
@@ -112,9 +115,11 @@ class ConfigFormPrestashop extends ConfigFormArray
     {
         $ret = $this->generateFieldArray($configField, "select", false);
         foreach ($configField->getOptions() as $option)
-            $options[$option->getValue()] = $option->getName();
-        $ret['options']  = array(
-            'list' => $options,
+            $options[] = array('id' => $option->getValue(), 'name' => $option->getName());
+        $ret['options'] = array(
+            'query' => $options,
+            'id' => 'id',
+            'name' => 'name',
         );
         return $ret;
     }

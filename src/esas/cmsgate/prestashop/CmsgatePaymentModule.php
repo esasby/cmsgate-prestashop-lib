@@ -27,7 +27,7 @@ class CmsgatePaymentModule extends PaymentModule
     {
         $this->name = Registry::getRegistry()->getModuleDescriptor()->getModuleMachineName();
         $this->tab = 'payments_gateways';
-        $this->version = Registry::getRegistry()->getModuleDescriptor()->getVersion();
+        $this->version = Registry::getRegistry()->getModuleDescriptor()->getVersion()->getVersion();
         $this->ps_versions_compliancy = array('min' => '1.7.1.0', 'max' => _PS_VERSION_);
         $this->author = Registry::getRegistry()->getModuleDescriptor()->getVendor()->getFullName();
         $this->bootstrap = true;
@@ -128,7 +128,7 @@ class CmsgatePaymentModule extends PaymentModule
             'id_language' => $this->context->language->id
         );
 
-        return $helper->generateForm($configForm);
+        return $helper->generateForm([$configForm->generate()]);
     }
 
     /**
@@ -149,7 +149,7 @@ class CmsgatePaymentModule extends PaymentModule
     {
         $ret = array();
         foreach ($configForm->getManagedFields()->getFieldsToRender() as $configField) {
-            $ret[$configField->getKey()] = Tools::getValue($configField->getKey(), $configField->getValue()); //скорее всего будет достаточно просто configField->getValue()
+            $ret[$configField->getKey()] = Tools::getValue($configField->getKey(), $configField->getValue(true)); //скорее всего будет достаточно просто configField->getValue()
         }
         return $ret;
     }

@@ -17,6 +17,7 @@ use esas\cmsgate\lang\LocaleLoaderPrestashop;
 use esas\cmsgate\wrappers\OrderWrapper;
 use esas\cmsgate\wrappers\OrderWrapperPrestashop;
 use Order;
+use PrestaShopCollection;
 
 class CmsConnectorPrestashop extends CmsConnector
 {
@@ -66,7 +67,11 @@ class CmsConnectorPrestashop extends CmsConnector
 
     public function createOrderWrapperByExtId($extId)
     {
-        //todo
+        $orderPayments = new PrestaShopCollection('OrderPayment');
+        $orderPayments->where('transaction_id', '=', $extId);
+        /** @var \OrderPayment $orderPayment */
+        $orderPayment = $orderPayments->getFirst();
+        return $this->createOrderWrapperByOrderNumber($orderPayment->order_reference);
     }
 
     public function createConfigStorage()

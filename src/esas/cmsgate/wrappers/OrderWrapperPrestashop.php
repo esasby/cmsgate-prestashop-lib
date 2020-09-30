@@ -4,7 +4,6 @@ namespace esas\cmsgate\wrappers;
 
 use Address;
 use Currency;
-use Order;
 use OrderCore;
 use OrderHistory;
 
@@ -98,7 +97,7 @@ class OrderWrapperPrestashop extends OrderSafeWrapper
      */
     public function getAmountUnsafe()
     {
-        return $this->order->getTotalPaid();
+        return $this->order->total_paid;
     }
 
     /**
@@ -162,7 +161,11 @@ class OrderWrapperPrestashop extends OrderSafeWrapper
      */
     public function getExtIdUnsafe()
     {
-        return ""; //todo
+        $orderPayment = $this->order
+            ->getOrderPaymentCollection()
+            ->orderBy('date_add', "desc")
+            ->getFirst();
+        return $orderPayment->transaction_id;
     }
 
     /**
@@ -171,6 +174,6 @@ class OrderWrapperPrestashop extends OrderSafeWrapper
      */
     public function saveExtId($extId)
     {
-        //todo
+        $this->order->addOrderPayment($this->getAmount(), null, $extId);
     }
 }

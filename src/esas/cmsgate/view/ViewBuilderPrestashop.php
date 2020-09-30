@@ -40,7 +40,7 @@ class ViewBuilderPrestashop extends ViewBuilder
             );
 
     }
-    
+
     public static function elementMessage($class, $text)
     {
         return
@@ -96,8 +96,9 @@ class ViewBuilderPrestashop extends ViewBuilder
     {
         if (Registry::getRegistry()->getConfigWrapper()->isSandbox()) {
             return
+                element::p() .
                 element::div(
-                    attribute::clazz("alert alert-info"),
+                    attribute::clazz("alert alert-warning"),
                     element::content(Registry::getRegistry()->getTranslator()->translate(Messages::SANDBOX_MODE_IS_ON))
                 );
         } else
