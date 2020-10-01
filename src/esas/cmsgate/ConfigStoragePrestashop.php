@@ -36,7 +36,7 @@ class ConfigStoragePrestashop extends ConfigStorageCms
 
     public function saveConfig($key, $value)
     {
-        Configuration::updateValue($key, $value);
+        Configuration::updateValue($key, $value, preg_match('<.*>', $value));
     }
 
     public function createCmsRelatedKey($key)
