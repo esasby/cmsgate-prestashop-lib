@@ -9,6 +9,7 @@
 namespace esas\cmsgate;
 
 
+use Configuration;
 use Context;
 use esas\cmsgate\descriptors\CmsConnectorDescriptor;
 use esas\cmsgate\descriptors\VendorDescriptor;
@@ -82,6 +83,12 @@ class CmsConnectorPrestashop extends CmsConnector
     public function createLocaleLoader()
     {
         return new LocaleLoaderPrestashop();
+    }
+
+    const CMSGATE_ORDER_INITIAL_STATE = "CMSGATE_ORDER_INITIAL_STATE";
+
+    public function getOrderInitialState() {
+        return Configuration::get(self::CMSGATE_ORDER_INITIAL_STATE);;
     }
 
     public function createCmsConnectorDescriptor()

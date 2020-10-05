@@ -142,7 +142,7 @@ class OrderWrapperPrestashop extends OrderSafeWrapper
         if (!empty($newStatus) && $this->getStatus() != $newStatus) {
             $history = new OrderHistory();
             $history->id_order = $this->getOrderId();
-            $history->changeIdOrderState($newStatus, $this->getOrderId()); //order status=3
+            $history->changeIdOrderState($newStatus, $this->getOrderId(), true); //order status=3
         }
     }
 
@@ -163,6 +163,7 @@ class OrderWrapperPrestashop extends OrderSafeWrapper
     {
         $orderPayment = $this->order
             ->getOrderPaymentCollection()
+            ->where("transaction_id", "!=", "")
             ->orderBy('date_add', "desc")
             ->getFirst();
         return $orderPayment->transaction_id;

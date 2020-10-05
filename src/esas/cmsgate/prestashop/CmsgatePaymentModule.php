@@ -4,6 +4,7 @@
 namespace esas\cmsgate\prestashop;
 
 use Configuration;
+use esas\cmsgate\CmsConnectorPrestashop;
 use esas\cmsgate\Registry;
 use esas\cmsgate\utils\Logger;
 use esas\cmsgate\view\admin\AdminViewFields;
@@ -13,10 +14,13 @@ use esas\cmsgate\view\ViewBuilderPrestashop;
 use Exception;
 use HelperForm;
 use Language;
+use OrderState;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
 use PaymentModule;
+use Shop;
 use Tools;
+use Validate;
 
 class CmsgatePaymentModule extends PaymentModule
 {
@@ -79,7 +83,8 @@ class CmsgatePaymentModule extends PaymentModule
         return $this->_html;
     }
 
-    public function renderMessages() {
+    public function renderMessages()
+    {
         $ret = "";
         $messages = Registry::getRegistry()->getMessenger()->getInfoMessagesArray();
         if (!empty($messages)) {
@@ -152,5 +157,38 @@ class CmsgatePaymentModule extends PaymentModule
             $ret[$configField->getKey()] = Tools::getValue($configField->getKey(), $configField->getValue(true)); //скорее всего будет достаточно просто configField->getValue()
         }
         return $ret;
+    }
+
+    public function install()
+    {
+        $ret = parent::install();
+        if (!$this->installOrderState()) {
+            return false;
+        }
+        return $ret;
+    }
+
+    public function installOrderState()
+    {
+        if (!Configuration::get(CmsConnectorPrestashop::CMSGATE_ORDER_INITIAL_STATE)
+            || !Validate::isLoadedObject(new OrderState(Configuration::get(CmsConnectorPrestashop::CMSGATE_ORDER_INITIAL_STATE)))) {
+            $order_state = new OrderState();
+            $order_state->name = array();
+            foreach (Language::getLanguages() as $language) {
+                $order_state->name[$language['id_lang']] = 'Awaiting for payment';
+            }
+            $order_state->send_email = false;
+            $order_state->color = '#4169E1';
+            $order_state->hidden = false;
+            $order_state->delivery = false;
+            $order_state->logable = false;
+            $order_state->invoice = false;
+            $order_state->module_name = $this->name;
+            if ($order_state->add()) {
+                //todo add icon
+            }
+            Configuration::updateValue(CmsConnectorPrestashop::CMSGATE_ORDER_INITIAL_STATE, (int)$order_state->id);
+        }
+        return true;
     }
 }
