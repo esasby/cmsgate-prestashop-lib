@@ -8,6 +8,7 @@
 
 namespace esas\cmsgate\view;
 
+use esas\cmsgate\hutkigrosh\RegistryHutkigrosh;
 use esas\cmsgate\messenger\Messages;
 use esas\cmsgate\Registry;
 use esas\cmsgate\utils\htmlbuilder\Attributes as attribute;
@@ -125,15 +126,39 @@ class ViewBuilderPrestashop extends ViewBuilder
     public static function elementPaymentMethodDescription()
     {
         return element::div(
-            attribute::clazz("alert alert-info"),
-            element::img(
-                attribute::src(""),
-                attribute::style("float:left; margin-right:15px;")
-//                attribute::height()
+            attribute::clazz("row"),
+            element::div(
+                attribute::clazz("col-lg-8"),
+                element::div(
+                    attribute::clazz("panel"),
+                    element::div(
+                        attribute::clazz("row"),
+                        element::div(
+                            attribute::clazz("col-lg-1"),
+                            element::img(
+                                attribute::src("/prestashop/modules/" . RegistryHutkigrosh::getRegistry()->getModuleDescriptor()->getModuleMachineName() . "/logo.png")
+                            )
+                        ),
+                        element::div(
+                            attribute::clazz("col-lg-8"),
+                            element::p(
+                                Registry::getRegistry()->getTranslator()->translate(AdminViewFields::ADMIN_PAYMENT_METHOD_DESCRIPTION)
+                            )
+                        )
+                    )
+                )
             ),
-            element::p(
-                Registry::getRegistry()->getTranslator()->translate(AdminViewFields::ADMIN_PAYMENT_METHOD_DESCRIPTION)
+            element::div(
+                attribute::clazz("col-lg-4"),
+                element::div(
+                    attribute::clazz("panel"),
+                    element::div(
+                        attribute::clazz("col"),
+                        self::elementModuleDetailsTable()
+                    )
+                )
             )
         );
     }
+
 }

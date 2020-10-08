@@ -143,6 +143,7 @@ class OrderWrapperPrestashop extends OrderSafeWrapper
             $history = new OrderHistory();
             $history->id_order = $this->getOrderId();
             $history->changeIdOrderState($newStatus, $this->getOrderId(), true); //order status=3
+            $history->add(true);
         }
     }
 

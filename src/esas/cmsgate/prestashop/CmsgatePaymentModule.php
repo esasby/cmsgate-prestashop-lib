@@ -36,6 +36,7 @@ class CmsgatePaymentModule extends PaymentModule
         $this->author = Registry::getRegistry()->getModuleDescriptor()->getVendor()->getFullName();
         $this->bootstrap = true;
         $this->need_instance = 0; // а может все-таки 1?
+        $this->is_eu_compatible = 1;
         parent::__construct();
 
         $this->displayName = Registry::getRegistry()->getTranslator()->translate(AdminViewFields::ADMIN_PAYMENT_METHOD_NAME);
@@ -116,6 +117,7 @@ class CmsgatePaymentModule extends PaymentModule
         $helper = new HelperForm();
         $helper->show_toolbar = false;
         $helper->table = $this->table;
+        $helper->bootstrap = true;
         $lang = new Language((int)Configuration::get('PS_LANG_DEFAULT'));
         $helper->default_form_language = $lang->id;
         $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ?: 0;
@@ -175,10 +177,10 @@ class CmsgatePaymentModule extends PaymentModule
             $order_state = new OrderState();
             $order_state->name = array();
             foreach (Language::getLanguages() as $language) {
-                $order_state->name[$language['id_lang']] = 'Awaiting for payment';
+                $order_state->name[$language['id_lang']] = 'New order';
             }
             $order_state->send_email = false;
-            $order_state->color = '#4169E1';
+            $order_state->color = '#00a7bd';
             $order_state->hidden = false;
             $order_state->delivery = false;
             $order_state->logable = false;
