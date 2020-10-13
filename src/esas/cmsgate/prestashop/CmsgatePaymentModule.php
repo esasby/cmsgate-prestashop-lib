@@ -193,4 +193,17 @@ class CmsgatePaymentModule extends PaymentModule
         }
         return true;
     }
+
+    /**
+     * @param $controller
+     * @return PaymentOption
+     */
+    public function createDefaultPaymentOption($controller) {
+        $paymentOption = new PaymentOption();
+        $paymentOption->setModuleName($this->name)
+            ->setCallToActionText(Registry::getRegistry()->getConfigWrapper()->getPaymentMethodName())
+            ->setAction($this->context->link->getModuleLink($this->name, $controller, array(), true))
+            ->setAdditionalInformation(Registry::getRegistry()->getConfigWrapper()->getPaymentMethodDetails() . ViewBuilderPrestashop::elementSandboxMessage());
+        return $paymentOption;
+    }
 }

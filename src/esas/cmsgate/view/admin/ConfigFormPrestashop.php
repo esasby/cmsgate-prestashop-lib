@@ -47,9 +47,13 @@ class ConfigFormPrestashop extends ConfigFormArray
                 'submit' => array(
                     'title' => Context::getContext()->getTranslator()->trans('Save', array(), 'Admin.Actions'),
                 ),
-//                'buttons' => array() //todok
+                'buttons' => $this->generateButtons()
             ),
         );
+    }
+
+    public function generateButtons() {
+        return array();
     }
 
     public function generateFields()
