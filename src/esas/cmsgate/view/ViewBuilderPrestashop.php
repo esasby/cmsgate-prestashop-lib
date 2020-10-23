@@ -136,7 +136,7 @@ class ViewBuilderPrestashop extends ViewBuilder
                         element::div(
                             attribute::clazz("col-lg-1"),
                             element::img(
-                                attribute::src("/prestashop/modules/" . RegistryHutkigrosh::getRegistry()->getModuleDescriptor()->getModuleMachineName() . "/logo.png")
+                                attribute::src("/prestashop/modules/" . Registry::getRegistry()->getModuleDescriptor()->getModuleMachineName() . "/logo.png")
                             )
                         ),
                         element::div(

@@ -4,7 +4,6 @@ use Cart;
 use Customer;
 use esas\cmsgate\CmsConnectorPrestashop;
 use esas\cmsgate\Registry;
-use esas\cmsgate\RegistryHutkigroshPrestashop;
 use Module;
 use ModuleFrontController;
 use Order;
@@ -31,9 +30,9 @@ class CmsgateModuleFrontController extends ModuleFrontController
     public function getOrderWrapper($orderNumber = null, $orderId = null) {
         $orderWrapper = null;
         if ($orderNumber != null)
-            $orderWrapper = RegistryHutkigroshPrestashop::getRegistry()->getOrderWrapperByOrderNumber($orderNumber);
+            $orderWrapper = Registry::getRegistry()->getOrderWrapperByOrderNumber($orderNumber);
         elseif ($orderId != null)
-            $orderWrapper = RegistryHutkigroshPrestashop::getRegistry()->getOrderWrapper($orderId);
+            $orderWrapper = Registry::getRegistry()->getOrderWrapper($orderId);
         else {
             $cart = $this->context->cart;
             if ($cart->id == null || $cart->id_customer == 0 || $cart->id_address_delivery == 0 || $cart->id_address_invoice == 0 || !$this->module->active) {
@@ -41,7 +40,7 @@ class CmsgateModuleFrontController extends ModuleFrontController
             }
             if (Order::getByCartId($cart->id) == null)
                 $this->createOrderByCart();
-            $orderWrapper = RegistryHutkigroshPrestashop::getRegistry()->getOrderWrapperForCurrentUser();
+            $orderWrapper = Registry::getRegistry()->getOrderWrapperForCurrentUser();
         }
         return $orderWrapper;
     }
