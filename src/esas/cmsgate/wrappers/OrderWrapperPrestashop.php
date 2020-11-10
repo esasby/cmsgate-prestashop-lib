@@ -100,6 +100,11 @@ class OrderWrapperPrestashop extends OrderSafeWrapper
         return $this->order->total_paid;
     }
 
+    public function getShippingAmountUnsafe()
+    {
+        return $this->order->total_shipping;
+    }
+
     /**
      * Валюта заказа (буквенный код)
      * @return string

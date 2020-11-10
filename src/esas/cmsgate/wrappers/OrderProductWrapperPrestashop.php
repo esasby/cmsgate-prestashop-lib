@@ -58,6 +58,6 @@ class OrderProductWrapperPrestashop extends OrderProductSafeWrapper
      */
     public function getUnitPriceUnsafe()
     {
-        return $this->productArray['total_price_tax_incl'];
+        return $this->productArray['unit_price_tax_incl'];
     }
 }

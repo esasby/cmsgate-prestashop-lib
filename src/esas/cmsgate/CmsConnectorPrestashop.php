@@ -96,8 +96,8 @@ class CmsConnectorPrestashop extends CmsConnector
         return new CmsConnectorDescriptor(
             "cmsgate-prestashop-lib",
             new VersionDescriptor(
-                "v1.12.2",
-                "2020-10-13"
+                "v1.13.0",
+                "2020-11-10"
             ),
             "Cmsgate Prestashop connector",
             "https://bitbucket.esas.by/projects/CG/repos/cmsgate-prestashop-lib/browse",
