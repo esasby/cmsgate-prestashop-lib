@@ -89,8 +89,12 @@ class CmsgatePaymentModule extends PaymentModule
         $ret = "";
         $messages = Registry::getRegistry()->getMessenger()->getInfoMessagesArray();
         if (!empty($messages)) {
-            foreach ($messages as $message)
-                $ret .= $this->displayInformation($message);
+            foreach ($messages as $message) {
+                if (version_compare(_PS_VERSION_, '1.7.5.0', '<')) {
+                    $ret .= $this->displayConfirmation($message);
+                } else
+                    $ret .= $this->displayInformation($message);
+            }
         }
         $messages = Registry::getRegistry()->getMessenger()->getWarnMessagesArray();
         if (!empty($messages)) {
